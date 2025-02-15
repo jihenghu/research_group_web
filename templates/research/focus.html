@@ -1,0 +1,82 @@
+<!-- extends表明此页面继承自 base.html 文件 -->
+{% extends "base.html" %}
+{% load staticfiles %}
+
+<!-- 写入 base.html 中定义的 title -->
+{% block title %}
+    Research Focus | RSEW
+{% endblock title %}
+
+<!-- 写入 base.html 中定义的 content -->
+{% block content %}
+
+
+<div class="container">
+	<ol class="breadcrumb">
+	  <li><a href="/index">Home</a></li>
+	  <li><a href="/research">Research</a></li>
+	  <li class="active">Research Focus</li>
+	</ol>
+
+	<div class="container">		
+		<div class="lab-legend">
+				<h2>Research Focus</h2>
+		</div>
+		<hr/>
+			
+		{% for focus in focus_list %}			
+		<div id="{{ focus.title }}" class="col-md-12 body-wraper">
+			{% if focus.title %}
+			<div class="page-header">
+				<h3>{{ focus.title }} <br/>
+				{% if focus.field %}<small>{{ focus.field }}</small>{% endif %}
+				</h3>
+			</div>
+			{% endif %}
+
+			<div class="col-md-12" style="font-size:16px;line-height:1.428;">	
+				
+					{{ focus.body | safe }}
+				
+			</div>
+			{% if focus.graph %}
+            <div class="container col-md-12" style="padding:30px;">					
+				<div  style="text-align:center;">
+				    <!-- trigger modal -->
+					<img data-toggle="modal" data-target="#bs-modal-lg-{{ forloop.counter0 }}" style="width: auto;height: auto; max-width: 800px; " src="{{ focus.graph.url }}" >
+
+					<!-- Modal -->										
+					<div class="modal fade bs-example-modal-lg text-center" id="bs-modal-lg-{{ forloop.counter0 }}"  tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" >
+					  <div class="modal-dialog modal-lg" style="display: inline-block; width: auto;">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+										<h4 class="modal-title" id="myModalLabel">Graphics</h4>
+									</div>
+									<img  src="{{ focus.graph.url }}" >
+									<div class="modal-footer">
+										<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+									</div>
+								</div>
+					  </div>
+					</div>
+
+				{% if focus.graph_desc %}
+				<p style="color: gray;text-align:left;padding-top:10px;font-size:16px;line-height:1.428;">
+					<small>{{ focus.graph_desc }}</small>
+				</p>
+				{% endif %}			
+				
+				</div>
+			</div>
+			{% endif %}
+		</div>				
+		{% endfor %}						
+	</div>
+</div>
+
+
+
+
+
+{% endblock content %}

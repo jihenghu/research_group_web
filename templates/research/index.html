@@ -1,0 +1,118 @@
+<!-- extends表明此页面继承自 base.html 文件 -->
+{% extends "base.html" %}
+{% load staticfiles %}
+
+<!-- 写入 base.html 中定义的 title -->
+{% block title %}
+    Research | RSEW
+{% endblock title %}
+
+<!-- 写入 base.html 中定义的 content -->
+{% block content %}
+
+
+<div class="container">
+	<ol class="breadcrumb">
+	  <li><a href="/index">Home</a></li>
+	  <li class="active">Research</li>
+	</ol>
+
+	<div class="container">								
+		<div class="col-md-12 body-wraper">
+			<div class="research-header">
+				<h1>Research</h1>
+				<div class="col-md-12" style="padding:0px;">
+					<p class="research-statement">					
+						Our major research fields can be summarized as:
+					</p>
+				</div>
+								
+				<div class="col-md-12" style="padding-left:0px;">
+				{% for focus in focus_list %}
+					<p class="research-statement">														
+						<a href="/research/focus#{{ focus.title }}"><b>{{ focus.title }}</a></b>&nbsp;&nbsp;&nbsp;{{ focus.body }}																
+					</p>
+					{% endfor %}
+					<!-- <h4><a href="/research/focus" style="" >>> Learn more about our research focus <<</a></h4> -->
+				</div>
+				
+				
+				<div class="col-md-12" style="margin-top:20px;margin-bottom:5px;padding-left:0px;">
+				{% for focus in focus_list %}				
+					<div class="col-md-4" style="text-align:center;margin-top:20px;margin-bottom:20px;">
+						<a href="/research/focus#{{ focus.title }}"><img src="{{ focus.graph.url }}" style="width:100%;height:200px;"></a>
+					</div>
+				{% endfor %}	
+				</div>
+			</div>
+
+
+		</div>
+
+			<div class="col-md-12" style="padding:0px;;margin-top:20px;">
+			<div class="col-md-6">
+				<div class="lab-legend">
+					<h2>Data Products</h2>
+				</div>
+				<hr/>
+				{% for product in products %}
+				{% if forloop.counter0 < 2 %}
+				<div class="col-md-6" style="padding:0px;">
+				{% if product.avatar %}
+					<a href="{% url 'products:detail' product.slug  %}"><img src="{{ product.avatar.url }}" title="{{ product.longname }}" style="height:240px;width:270px;"></a>
+				{% endif %}
+				</div>
+				{% endif %}
+				{% endfor %}
+				{% for product in products %}
+				<div class="col-md-12">
+					
+						<h4>{{ product.longname }}<small><a href="{% url 'products:detail' product.slug  %}">&nbsp; >>detail</a></small></h4>
+						<p style="overflow:hiden;">{{ product.desc | slice:'300' }}</p>
+					
+				</div>
+				{% endfor %}
+				<h4><a href="/products" style="" >>> More Data Products <<</a></h4>
+			</div>
+
+			<div class="col-md-6">
+				<div class="group-legend">
+					<h2>Recent Publications</h2>
+				</div>
+				<hr/>
+				
+				{% for publication in publications %}
+				{% if forloop.counter0 < 2 %}
+				<div class="col-md-6" style="padding:0px;">
+					{% if publication.avatar %}
+					<a href="{% url 'research:publication_detail' publication.id  %}"><img src="{{ publication.avatar.url }}" title="{{ publication.title }}" style="height:240px;width:280px;"></a>
+					{% endif %}
+				</div>
+				{% endif %}
+				{% endfor %}
+				{% for publication in publications %}
+				<div class="col-md-12">
+					
+						<h4>{{ publication.title }}</h4>
+						<p>Accepted:{{ publication.accept | date:"m-20y" }}&nbsp; <a href="{% url 'research:publication_detail' publication.id  %}">&nbsp; >>detail</a></p>
+						{% if publication.summary %}
+						<p style="overflow:hiden;">{{ publication.summary | slice:'500' }}...</p>
+						{% else %}
+						<p style="overflow:hiden;">{{ publication.abstract | slice:'500' }}...</p>
+						{% endif %}
+				</div>
+				{% endfor %}
+				<h4><a href="/research/publications" style="" >>> More Publications <<</a></h4>
+				
+			</div>
+			
+			</div>
+					
+	</div>
+</div>
+
+
+
+
+
+{% endblock content %}

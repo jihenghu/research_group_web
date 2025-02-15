@@ -1,0 +1,85 @@
+.lab-legend{
+	padding-left:15px;
+	border-left: 8px solid #aa6708;
+}
+
+/* #lab-legend>h2{ */
+	/* margin-bottom:0px!important; */
+/* } */
+
+#lab{
+	margin-bottom:40px;
+}
+
+#lab-title{
+padding-left:50px;
+padding-right:50px;
+margin-bottom:40px;
+}
+
+#lab-title h3{
+	text-align:center;
+	font-weight:600;
+}
+
+#lab-text>p{
+	font-size:16px;
+}
+
+.group-legend{
+	padding-left:15px;
+	border-left: 8px solid #1b809e;
+}
+
+
+
+/* div.member-info p{ */
+
+	/* margin-left:-30px; */
+/* } */
+p.member-havy{
+	font-size:18px!important;
+	font-weight:700!important;
+}
+
+img.lab-img{
+    /* display:inline-block; */
+	width:100%;
+	border-radius:10px;
+	box-shadow: 2px 2px 5px #888888;
+}
+
+img.member-thumbnail{
+	display:inline-block;
+
+	width:100%;
+	border-radius:10px;
+	box-shadow: 2px 2px 2px #888888;
+}
+
+
+.opportunity-legend{
+	padding-left:15px;
+	border-left: 8px solid #d9534f;
+}
+
+div.opport-box{
+	margin:20px;
+	padding:30px; 
+	border:1px solid #ccc;
+	border-radius:10px;
+	box-shadow: 2px 2px 5px #888888;
+}
+
+div.opport-box>p,
+div.opport-box>p>a,
+div.opport-box>h3
+{
+	color:#000;
+	text-decoration:none;
+	text-align:center;
+}
+
+div.opport-box>p>a:hover{
+	color:#CCC;
+}

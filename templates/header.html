@@ -1,0 +1,71 @@
+{% load staticfiles %}
+
+<div class="container-fluid" style="padding:0px;" >
+	
+		<div id="header-title" class="container-fluid" >
+			<div id="header-title-text" class="container" >
+			  <p>
+			  <span>水循环和能量遥感实验室</span><br/>
+              <span>Laboratory of Remote Sensing of Energy and Water Cycle</span>
+			  </p>
+            </div>
+        </div>
+		
+		<nav class="navbar" style="background-color:#630;box-shadow:2px 2px 2px #888888;" >
+			  <div class="container" style="padding:0px;font-family:'Arial Negreta', 'Arial Normal', 'Arial';" >
+
+				<!-- Collect the nav links, forms, and other content for toggling -->
+				<div class="collapse navbar-collapse " id="navbar-collapse-panel">
+				  <ul class="nav navbar-nav" >				  
+					
+					<!-- <li><a href="/index"><span style="font-size:16px;">能量交换与水循环遥感实验室</span></a></li> -->
+					<li><a href="/index" {% if '/index' in request.path %}class="item-current"{% endif %}>HOME</a></li>
+					<li><a href="/about" {% if '/about' in request.path %}class="item-current"{% endif %}>ABOUT</a></li>
+					
+					<li class="dropdown">					
+					  <a href="/research" {% if '/research' in request.path %} class="item-current"{% endif %}>RESEARCH</a>
+					  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <span class="caret"></span></a>
+					  <ul class="dropdown-menu">
+						<li><a href="/research/focus">Focus</a></li>
+						<li><a href="/research/publications">Publications</a></li>
+						<!-- <li role="separator" class="divider"></li> -->
+						<li><a href="/research/resource">Resource</a></li>
+						<!-- <li><a href="/research/resource#image-gallery">Image Gallery</a></li> -->
+					  </ul>
+					</li>
+					
+									  
+					
+					<li class="dropdown">
+					  <a href="/products" {% if '/products' in request.path %}class="item-current"{% endif %} >PRODUCTS </a>
+					  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></a>
+					  <ul class="dropdown-menu">
+						<li><a href="/products/EDVI">EDVI</a></li>
+						<li><a href="/products/ET">EDVI Based ET</a></li>
+						<li><a href="/products/LH">Latent Heating</a></li>						
+						<li><a href="/products/MLSE">MLSE</a></li>
+						{% if request.user.is_authenticated %} 
+						<li role="separator" class="divider"></li>
+						<li ><a href="/batch_upload" >Upload</a></li>
+						<li ><a href="/productimages" >Product Images</a></li>
+						{% endif %} 
+					  </ul>
+					</li>	
+					
+					<li><a href="/news" {% if '/news' in request.path %}class="item-current"{% endif %}>NEWS</a></li>					
+					<li><a href="/contactus" {% if '/contactus' in request.path %}class="item-current"{% endif %}>CONTACT US</a></li>					
+				  </ul>				  
+				  				  
+				  <form class="navbar-form navbar-right" style="margin-top:10px;">
+					<div class="form-group" >
+					  <input type="text" class="form-control" placeholder="Search">
+					</div>
+					<button type="submit" class="btn btn-default">Submit</button>
+				  </form>
+
+				</div><!-- /.navbar-collapse -->
+			  </div><!-- /.container-fluid -->
+			</nav>
+
+
+</div>

@@ -1,0 +1,332 @@
+<!-- extends表明此页面继承自 base.html 文件 -->
+{% extends "base.html" %}
+{% load staticfiles %}
+
+<!-- 写入 base.html 中定义的 title -->
+{% block title %}
+Detail | Publications
+{% endblock title %}
+
+<!-- 写入 base.html 中定义的 content -->
+{% block content %}
+
+<div class="container">
+	<ol class="breadcrumb">
+	  <li><a href="/index">Home</a></li>
+	  <li><a href="/products">Products</a></li>
+	  <li class="active">{{ product.slug | upper }}</li>
+	</ol>
+
+	<div class="container">		
+		<div class="lab-legend">
+			<h2>{{ product.longname }}</h2>
+		</div>
+		<hr/>
+			
+
+		<div class="container">				
+				
+				<!-- 摘要 -->
+				{% if product.desc %}					
+				<div class="container col-md-12" style="margin-bottom:30px;" >						
+					<p>
+						{{ product.desc }}
+					</p>
+				</div>
+				{% endif %}
+				
+                <h3 >Sample</h3>
+				<p>Here provides quick views on several data samples</p>
+				<div class="col-md-12" style="border:1px solid grey; border-radius:5px; padding-top:50px;padding-bottom:50px;">
+					
+					<div id="form-div" class="col-md-12">
+						<form id="form-listened" >
+						   {% csrf_token %}  
+						    <p class="col-md-1" style="padding-top:20px;">
+							<p class="col-md-3">Product：<input id="product" name="product" type="text" class="form-control" disabled value ="{{ product.slug }}"></p>
+							<p class="col-md-3">Temporal Resolution : <select id="scale" class="form-control" onchange="alter(this.selectedIndex)"></select></p>
+							<p class="col-md-3">Date : <select id="date" class="form-control" ></select></p>
+							<p class="col-md-2" style="padding-top:20px;"><button id="mybtn" type="submit" class="btn btn-default">Submit </button></p>
+						</form>
+					</div>
+
+				  
+					<div class="col-md-12">										
+						<img id="imagediv" style="width:100%;margin-top:20px;" src= "{{imgurl}}" >
+					</div>
+				</div>
+				
+
+	
+				
+				<!-- 正文 -->
+				<div class="container col-md-12" style="margin-top:30px;">
+					<h3>Overview</h3>
+					<div class="col-md-6" >
+						<table class="table">
+							<tbody>
+							  <tr>
+								<th scope="row">Spatial Coverage</th>
+								<td>{{ product.spatial_coverage | capfirst  }}</td>
+							  </tr>
+							  <tr>
+								<th scope="row">Spatial Resolution</th>
+								<td>{{ product.spatial_resolution  }}</td>						
+							  </tr>
+							  <tr>
+								<th scope="row">Temporal Coverage</th>
+								<td>{{ product.date_start  | date:"Y-m-d"  }} ~ {{ product.date_end | date:"Y-m-d" }}</td>										
+							  </tr>
+								<tr>
+								<th scope="row">Temporal Resolution</th>
+								<td>{{ product.temporal_resolution  }}</td>										
+							  </tr>
+							  <tr>
+								<th scope="row"></th>
+								<td></td>											
+							  </tr>
+							</tbody>							
+						</table>					
+					</div>
+					<div class="col-md-6" >
+						<table class="table">
+							<tbody>
+							  <tr>
+								<th scope="row">Data Format(s) </th>
+								<td>{{ product.format }}</td>
+							  </tr>
+							  <tr>
+								<th scope="row">Version(s)</th>
+								<td>{{ product.version }}</td>						
+							  </tr>
+							  <tr>
+								<th scope="row">Parameter(s)</th>
+								<td>{{ product.meta }}</td>											
+							  </tr>	
+							  <tr>
+								<th scope="row"></th>
+								<td></td>											
+							  </tr>
+							</tbody>
+						</table>						
+					</div>
+				</div>
+
+
+
+				
+
+				<div class="container col-md-12" >
+					<h3>Data Access</h3>	
+					<div class="col-md-12" >
+										
+						<p>
+							If you need long time range data record, please <button class="btn btn-default" onclick="window.location.href='/contactus'">contact us</button>								
+						</p>
+
+						{% if product.access %}						
+							<p>You can download the .zip package of dataset spans a short period 						
+							<button class="btn btn-success" onclick="window.location.href='{% url 'products:access' product.slug  %}'">Download</button>
+							</p>
+						{% endif %}
+					</div>
+				</div>
+				
+				{% if product.document %}
+				<div class="container col-md-12" >
+					<h3>Document</h3>	
+					<div class="col-md-12" >
+						<p><span>Document</span>
+							<button class="btn btn-default" onclick="window.location.href='{% url 'products:document' product.slug  %}'">Click for download</button>
+						</p>
+					</div>
+				</div>
+				{% endif %}
+				
+				{% if product.citation %}
+				<div class="container col-md-12" >
+					<h3>Citation</h3>	
+					<div class="col-md-12" >
+						<p>{{ product.citation | safe }}</p>
+					</div>
+				</div>
+				{% endif %}
+				
+				{% if product.faqs %}
+				<div class="container col-md-12" >
+					<h3>Frequently Asked Questions</h3>	
+					<div class="col-md-12" style="padding-left:0px;" >
+						{{ product.faqs | safe}}
+					</div>
+				</div>
+				{% endif %}
+				
+		</div>				
+	</div>
+
+
+
+
+
+			<hr/>
+			<div class="row">
+				{% if next_article %}
+				<div  style="float:left;">
+				
+					<a href="{% url 'products:detail' next_article.slug %}" class="btn btn-default">
+					<< Next  |  {{ next_article.longname | slice:'80' }}....
+					</a>
+				</div>
+				{% endif %}
+				
+			{% if pre_article %}
+				<div  style="float:right;">
+					<a  href="{% url 'products:detail' pre_article.slug %}" class="btn  btn-default" >
+					Previous |	{{ pre_article.longname | slice:'80' }}....>>
+					</a>
+				</div>
+			{% endif %}
+			</div>			
+</div>
+	
+
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script> -->
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script>
+
+    function isnull(val) {
+        return (val == '' || val == undefined || val == null)
+    }
+	
+    $('#mybtn').click(function (event) {
+        event.preventDefault();
+        var product = $('#product').val().replace(/(^\s*)|(\s*$)/g, '');;
+        var scale = $('#scale').val().replace(/(^\s*)|(\s*$)/g, '');;
+        var date = $('#date').val().replace(/(^\s*)|(\s*$)/g, '');;	
+		if (isnull(product) || isnull(scale) || isnull(date) ){
+			alert("field [product,scale,date] must be not null")
+			return 0;
+		}
+				
+        $.ajax({
+            url: "/ajaxpic/",
+            type: "POST",
+			dataType:'text', 
+            data: { "product":product,
+			        "scale":scale,
+			        "date":date,
+					"csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val(),
+			},
+			success: function(response){
+			//	$("#imagediv").attr("src","data:image/png;base64,"+response);              
+				$("#imagediv").attr("src",response);              
+            },
+			error:function(response){
+				$("#imagediv").attr("src","/media/utils/no-object-found.gif"); 
+                alert("Illegal Request!!");
+            }
+        });
+    });
+	
+	
+	$('#scale').change(function (event) {
+        var product = $('#product').val().replace(/(^\s*)|(\s*$)/g, '');;
+        var scale = $('#scale').val().replace(/(^\s*)|(\s*$)/g, '');;
+        var date = $('#date').val().replace(/(^\s*)|(\s*$)/g, '');;	
+		if (isnull(product) || isnull(scale) || isnull(date) ){
+			alert("field [product,scale,date] must be not null")
+			return 0;
+		}
+				
+        $.ajax({
+            url: "/ajaxpic/",
+            type: "POST",
+			dataType:'text', 
+            data: { "product":product,
+			        "scale":scale,
+			        "date":date,
+					"csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val(),
+			},
+			success: function(response){
+			//	$("#imagediv").attr("src","data:image/png;base64,"+response);              
+				$("#imagediv").attr("src",response);              
+            },
+			error:function(response){
+				$("#imagediv").attr("src","/media/utils/no-object-found.gif"); 
+                alert("Illegal Request!!");
+            }
+        });
+    });
+	
+	$('#date').change(function (event) {
+        var product = $('#product').val().replace(/(^\s*)|(\s*$)/g, '');;
+        var scale = $('#scale').val().replace(/(^\s*)|(\s*$)/g, '');;
+        var date = $('#date').val().replace(/(^\s*)|(\s*$)/g, '');;	
+		if (isnull(product) || isnull(scale) || isnull(date) ){
+			alert("field [product,scale,date] must be not null")
+			return 0;
+		}
+				
+        $.ajax({
+            url: "/ajaxpic/",
+            type: "POST",
+			dataType:'text', 
+            data: { "product":product,
+			        "scale":scale,
+			        "date":date,
+					"csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val(),
+			},
+			success: function(response){
+			//	$("#imagediv").attr("src","data:image/png;base64,"+response);              
+				$("#imagediv").attr("src",response);              
+            },
+			error:function(response){
+				$("#imagediv").attr("src","/media/utils/no-object-found.gif"); 
+                alert("Illegal Request!!");
+            }
+        });
+    });
+</script>
+
+<script type="text/javascript">
+        //定义省/直辖市数组
+        var scale_list = {{ scales }};
+        //定义市/区二维数组
+        var date_list = {{ dates }};
+        //获取对象
+        var scale = document.getElementById('scale');
+        var date = document.getElementById('date');
+        //初始化菜单
+        onload = function () {
+            //指定省option标记的个数
+            scale.length = scale_list.length;
+            //数组数据写入<option>标记中
+            for(var i = 0; i < scale_list.length; i++){
+                scale.options[i].text = scale.options[i].value = scale_list[i];
+            }
+            //设置省列表默认选项
+            var index = 0;
+            scale.index = index;
+            //指定城市option标记的个数
+            date.length = date_list[index].length;
+            //数组数据写入option标记
+            for (var j = 0; j < date_list[index].length; j++) {
+                date.options[j].text = date.options[j].value = date_list[index][j];
+            }
+        }
+        function alter(index) {
+            //修改省列表的选择项
+            scale.index = index;
+            //指定城市option标记的个数
+            date.length = date_list[index].length;
+            //数组中的数据写入option标记
+            for (var j = 0; j < date_list[index].length; j++) {
+                date.options[j].text = date.options[j].value = date_list[index][j];
+            }
+        }
+</script>
+
+{% endblock content %}
+
+

@@ -1,0 +1,147 @@
+<!-- extends表明此页面继承自 base.html 文件 -->
+{% extends "base.html" %}
+{% load staticfiles %}
+
+<!-- 写入 base.html 中定义的 title -->
+{% block title %}
+Detail | Publications
+{% endblock title %}
+
+<!-- 写入 base.html 中定义的 content -->
+{% block content %}
+
+<div class="container">
+	<ol class="breadcrumb">
+	  <li><a href="/index">Home</a></li>
+	  <li><a href="/news">News</a></li>
+	  <li class="active">Detail</li>
+	</ol>
+
+	<div class="container">		
+		<div class="lab-legend">
+				<h2>News Detail</h2>
+			</div>
+			<hr/>
+			
+
+			<div class="container">				
+					<h2 style="text-align:center;margin-bottom:30px;">
+						<b>				
+
+								{{ news.title }}
+
+						</b>
+					</h2>
+					<!-- 时间/期刊 -->
+					<div class="col-md-12" style="margin-bottom:10px;">
+					    {% if news.authors %}
+						<p class="col-md-4" style="text-align:center;"> 
+						<i title="Author" class="fas fa-user" style="color: grey;">&nbsp;</i>
+							<strong>{{ news.authors  }}</strong>
+						</p>
+						{% endif %}	
+						{% if news.created %}
+						<p class="col-md-4" style="text-align:center;"> 
+							<i title="Created" class="fas fa-clock" style="color: grey;">&nbsp;</i>
+							<strong>Created: {{ news.created | date:"Y-m-d" }}</strong>
+						</p>
+						{% endif %}
+						{% if news.category %}
+						<p class="col-md-4" style="text-align:center;">
+							<i  title="Category" class="fas fa-tags" style="color: grey;">&nbsp;</i>
+							<strong>{{ news.category | capfirst }}</strong>
+						</p>
+						{% endif %}
+
+					</div>
+					
+					<!-- 摘要 -->
+					{% if news.summary %}					
+					<div class="container col-md-12" style="margin-bottom:10px;padding-left:30px;padding-right:30px;">						
+						<p style="color: gray;background-color:#ddd;padding:10px; border-radius:5px;">
+							{{ news.summary }}
+						</p>
+					</div>
+					{% endif %}
+					
+					<!-- 正文 -->
+					{% if news.body %}					
+					<div class="container col-md-12" style="margin-bottom:20px;padding-left:20px;padding-right:20px;">						
+						<p>
+							{{ news.body | safe }}
+						</p>
+					</div>
+					{% endif %}
+
+                    {% if news.image %}
+					<div class="container col-md-12">					
+					<div  style="text-align:center;">
+									    <!-- trigger modal -->
+						<img data-toggle="modal" data-target="#bs-modal-lg-{{ forloop.counter0 }}" style="height: auto; max-width: 70%; " src="{{ news.image.url }}" >
+
+						<!-- Modal -->										
+						<div class="modal fade bs-example-modal-lg text-center" id="bs-modal-lg-{{ forloop.counter0 }}"  tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" >
+						  <div class="modal-dialog modal-lg" style="display: inline-block; width: auto;">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+											<h4 class="modal-title" id="myModalLabel">Graphics</h4>
+										</div>
+										<img  src="{{ news.image.url }}" style="margin-top:20px;max-width:1600px;" >
+										<div class="modal-footer">
+											<button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+										</div>
+									</div>
+						  </div>
+						</div>
+
+					</div>
+					</div>
+					{% endif %}
+					
+					{% if news.url %}
+					<div class="container col-md-12" >
+						<h4><b>相关链接</b></h4>					
+						<p style="color: gray;">
+						     <i class="fas fa-link" style="color: grey;">&nbsp;</i>
+							 <a href="{{ news.url }}" target="blank">{{ news.url }}</a>
+						</p>				
+					</div>
+					{% endif %}
+					
+				</div>				
+			</div>
+
+			            <hr/>
+			<div class="row">
+				{% if next_article %}
+				<div  style="float:left;">
+				
+					<a href="{% url 'news:detail' next_article.id %}" class="btn btn-default">
+					<< Next  |  {{ next_article.title | slice:'60' }}....
+					</a>
+				</div>
+				{% endif %}
+				
+			{% if pre_article %}
+				<div  style="float:right;">
+					<a  href="{% url 'news:detail' pre_article.id %}" class="btn  btn-default" >
+					Previous |	{{ pre_article.title | slice:'60' }}....>>
+					</a>
+				</div>
+			{% endif %}
+			</div>
+	</div>
+				
+
+
+
+
+
+
+
+
+
+{% endblock content %}
+
+

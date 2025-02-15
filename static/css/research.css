@@ -1,0 +1,10 @@
+
+div.research-header>h1{
+text-align:center;margin:30px;
+}
+
+p.research-statement{
+	font-size:16px;
+	line-height:1.428;
+	color:#555;
+}

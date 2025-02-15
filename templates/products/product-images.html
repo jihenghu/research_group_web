@@ -1,0 +1,115 @@
+<!-- extends表明此页面继承自 base.html 文件 -->
+{% extends "base.html" %}
+{% load staticfiles %}
+
+<!-- 写入 base.html 中定义的 title -->
+{% block title %}
+    Resource | RSEW
+{% endblock title %}
+
+<!-- 写入 base.html 中定义的 content -->
+{% block content %}
+
+
+<div class="container">
+	<ol class="breadcrumb">
+	  <li><a href="/index">Home</a></li>
+	  <li><a href="/products">Products</a></li>
+	  <li class="active">Images</li>
+	</ol>
+
+
+<!-- popular-links -->
+	<div id="popular-links" class="container">		
+		<div class="lab-legend">
+			<h2>Quiks Links</h2>
+		</div>
+		<hr/>	
+		
+		<div class="container" style="padding:10px;">
+			{% for product in products %}
+			<div class="col-md-2">		
+				<div style="text-align:center;border:1px solid #7B4D12;border-radius:5px;padding-top:5px;padding-bottom:5px;margin-bottom:20px;">
+					<a href="#{{ product.slug }}-imgs"  style="color:#000;"><b>{{ product.longname }}</b></a>
+				</div>
+			</div>							
+			{% endfor %}			
+		</div>		
+	</div>
+
+<!-- image-gallery	 -->
+	<div id="image-gallery" class="container">		
+		<div class="group-legend">
+				<h2>Image Gallery</h2>
+		</div>
+		<hr/>
+		{% for product in products %}
+		<h3 id="{{ product.slug }}-imgs" >{{ product.longname }}</h3>	
+		<div  class="container">	
+			{% for image in images %}
+				{% if image.product == product %}
+			<div class="col-md-3 " style="margin-top:20px;height:360px;">
+				<div class="col-md-12 lazy-demo">
+					<img class="lazy" data-toggle="modal" data-target="#gallery-modal-lg-{{ forloop.counter0 }}" title="{{ image.title }}" alt="{{ image.title }}"  data-echo="{{ image.image.url }}" src="/media/utils/loading.gif" style="width:232px; height:232px;">
+				</div>	
+			
+				<div class="col-md-12" style="margin-top:10px;line-height:10px;">
+									<p><b>Product :</b> {{ image.product.longname }}</p>
+									<p><b>Updated:</b> {{ image.updated | date:"Y-m-d" }}</p>
+									<p><b>Levels :<span style="color:red;"> {{ image.scale | capfirst }}</span></b></p>
+									<p><b>Date :<span style="color:red;"> {{ image.date  }}</span></b></p>
+							
+				</div>
+				
+				<!-- Modal -->										
+				<div class="modal fade bs-example-modal-lg text-center" id="gallery-modal-lg-{{ forloop.counter0 }}"  tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" >
+				  <div class="modal-dialog modal-lg" style="display: inline-block; width: auto;">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+						   <hr/>							
+							<div style="padding-left:250px;padding-right:250px;">
+									<p><b>Product :</b> {{ image.product.longname }}</p>
+									<p><b>Updated:</b> {{ image.updated | date:"Y-m-d" }}</p>
+									<p><b>Levels :<span style="color:red;"> {{ image.scale | capfirst }}</span></b></p>
+									<p><b>Date :<span style="color:red;"> {{ image.date  }}</span></b></p>
+						</div>
+						</div>
+
+
+						<img  src="{{ image.image.url }}" style="max-width:1600px;">
+
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				  </div>
+				</div>
+			</div>	
+				{% endif %}
+			{% endfor %}			
+			
+
+		</div>
+		
+	  {% endfor %}
+	</div>
+
+</div>
+
+<!-- 图片懒加载	 -->
+<script src="/static/js/echo.min.js"></script>
+<script>
+
+Echo.init({
+    offset: 0,//离可视区域多少像素的图片可以被加载
+　　 throttle: 0 //图片延时多少毫秒加载
+}); 
+
+</script>
+<style>
+　　.lazy-demo img { 
+　　　　background: url('media/utils/loading.gif') 50% no-repeat;}
+</style>
+{% endblock content %}

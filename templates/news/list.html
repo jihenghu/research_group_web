@@ -1,0 +1,115 @@
+<!-- extends表明此页面继承自 base.html 文件 -->
+{% extends "base.html" %}
+{% load staticfiles %}
+
+<!-- 写入 base.html 中定义的 title -->
+{% block title %}
+    News | RSEW
+{% endblock title %}
+
+<!-- 写入 base.html 中定义的 content -->
+{% block content %}
+
+
+<div class="container">
+	<ol class="breadcrumb">
+	  <li><a href="/index">Home</a></li>
+	  <li class="active">News</li>
+	</ol>
+
+	<div id="group" class="container">		
+		<div class="group-legend">
+				<h2>News</h2>
+		</div>
+		<hr/>
+			
+		{% for news in news_list %}
+		<div class="paper-wraper container">
+			{% if news.avatar %}
+			<div class="col-md-2 image-wraper">
+				<img class="publication-avator" src="{{ news.avatar.url }}">
+			</div>
+			<div class="col-md-10 body-wraper">
+			{% else %}
+			<div class="col-md-12 body-wraper">
+			{% endif %}
+				<h4>
+					<b>				
+						<a href="{% url 'news:detail' news.id %}"
+						   style="color: black;" 
+						>
+							{{ news.title }}
+						</a>
+					</b>
+				</h4>
+				<!-- 时间/期刊 -->
+				<div class="col-md-12">	
+					<p class="col-md-3"> <i title="category" class="fas fa-tags" style="color: grey;">&nbsp;</i>
+						<strong>{{ news.category | capfirst }}</strong>
+					</p>					
+					<p class="col-md-3"> <i  title="Accepted" class="fas fa-calendar" style="color: grey;">&nbsp;</i>
+						<strong>Created: {{ news.created | date:"Y-m-d" }}</strong>
+					</p>
+
+					<p class="col-md-3"> <i title="Author" class="fas fa-user" style="color: grey;">&nbsp;</i>
+						<strong>{{ news.authors  }}</strong>
+					</p>
+				</div>
+				<!-- 摘要 -->
+				<div>
+					<p style="color: gray;">
+						{{ news.summary|slice:'600' }}...
+					</p>
+				</div>
+
+			</div>
+			
+		</div>			
+		{% endfor %}				
+	</div>
+		    <!-- 页码导航 -->
+		<nav aria-label="pagination container" style="text-align:center;">
+		  <ul class="pagination ">	
+					<!-- 如果不是第一页，则显示上翻按钮 -->
+				{% if news_list.has_previous %}
+				<li>
+					
+						<a href="?page=1">&laquo; 1</a>
+					
+				</li>
+				<li><span>...</span></li>
+				<li>
+					
+						<a href="?page={{ news_list.previous_page_number }}" >
+							{{ news_list.previous_page_number }}
+						</a>
+					
+				</li>
+				{% endif %}
+
+				<!-- 当前页面 -->
+				<li class="active">			
+					<span>{{ news_list.number }}<span class="sr-only">(current)</span></span>
+				</li>
+		  
+				<!-- 如果不是最末页，则显示下翻按钮 -->
+				{% if news_list.has_next %}
+				<li>
+					
+					<a href="?page={{ news_list.next_page_number }}"> {{ news_list.next_page_number }} </a>
+				
+				</li>						
+				<li><span>...</span></li>
+				<li>
+								
+						<a href="?page={{ news_list.paginator.num_pages }}">{{ news_list.paginator.num_pages }} &raquo; </a>
+					
+				</li>
+				{% endif %}  
+			 </ul>
+		</nav>
+	
+
+</div>
+
+{% endblock content %}

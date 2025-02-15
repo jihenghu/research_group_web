@@ -1,0 +1,158 @@
+
+{% extends "base.html" %}
+{% load staticfiles %}
+
+
+{% block title %}
+    About | RSEW
+{% endblock title %}
+
+
+{% block content %}
+
+
+<div class="container">
+	<ol class="breadcrumb">
+	  <li><a href="/index">Home</a></li>
+	  <li class="active">About</li>
+	</ol>
+
+	<div id="group" class="container">		
+		<div class="group-legend">
+				<h2>The Group</h2>
+	    </div>
+								<div class="row" style="padding-top:20px;">
+										
+									{% for member in members %}
+									  {% if member.title == 'professor' %}
+										<div class="col-md-12" >
+											<div class="col-md-2 col-sm-3">
+											<!-- <a href="/members/?{{ member.id }}"> -->
+											{% if member.avatar %}
+												<img style="width:100%;border-radius:10px;box-shadow: 2px 2px 5px #888888;" 
+												   src="{{member.avatar.url}}" alt="Our Group" title="Our Group">	
+										    {% endif %}
+											<!-- </a> -->
+											</div>
+											<div class="col-md-3 col-sm-6" > 
+												<p class="member-havy" >{{member.name}}</p>
+												{% if member.title == 'professor' %}<p><i>Professor</i></p>{% endif %}
+												{% if member.title == 'postdoc' %}<p><i>Postdoc student</i></p>{% endif %}
+												{% if member.title == 'phd' %}<p><i>Ph.D. student</i></p>{% endif %}
+												{% if member.title == 'graduate' %}<p><i>Graduate student</i></p>{% endif %}
+												{% if member.title == 'under' %}<p><i>Undergraduate student</i></p>{% endif %}
+												{% if member.title == 'visit' %}<p><i>Visiting student</i></p>{% endif %}
+												
+												
+												
+												
+												<p><strong>Email:</strong>&nbsp; {{member.email}}</p>
+												<p><strong>Office:</strong>&nbsp; {{member.office}}</p>
+												{% if member.homepage %}
+												<p><strong>Homepage:</strong>&nbsp;{{member.homepage | safe}}</p>
+												{% endif %}
+											</div>
+											<div class="col-md-7 col-sm-12" > 
+												<p class="member-havy" >Research interests</p>
+												<p>{{ member.interests | safe }}</p>
+											</div>
+										</div>
+										{% endif %}
+										{% endfor %}
+								</div>
+		 
+							<div class="row" >							
+								{% for member in members %}
+								  {% if member.title != 'professor'  %}
+									{% if  member.state != 'no' %}
+										<div class="col-md-12" style="padding-top:20px;" >
+											<div class="col-md-2 col-sm-3">
+											<!-- <a href="/members/?{{ member.id }}"> -->
+											{% if member.avatar %}
+												<img style="height:180px;width:100%;border-radius:10px;box-shadow: 2px 2px 5px #888888;" 
+												   src="{{member.avatar.url}}" alt="Our Group" title="Our Group">	
+										    {% endif %}
+											<!-- </a> -->
+											</div>
+											<div class="col-md-3 col-sm-6" > 
+												<p class="member-havy" >{{member.name}}</p>
+												{% if member.title == 'professor' %}<p><i>Professor</i></p>{% endif %}
+												{% if member.title == 'postdoc' %}<p><i>Postdoc student</i></p>{% endif %}
+												{% if member.title == 'phd' %}<p><i>Ph.D. student</i></p>{% endif %}
+												{% if member.title == 'graduate' %}<p><i>Graduate student</i></p>{% endif %}
+												{% if member.title == 'under' %}<p><i>Undergraduate student</i></p>{% endif %}
+												{% if member.title == 'visit' %}<p><i>Visiting student</i></p>{% endif %}
+												<p><strong>Email:</strong>&nbsp; {{member.email}}</p>
+												<p><strong>Office:</strong>&nbsp; {{member.office}}</p>
+												{% if member.homepage %}
+												<p><strong>Homepage:</strong>&nbsp;{{member.homepage | safe}}</p>
+												{% endif %}
+											</div>
+											<div class="col-md-7 col-sm-12" > 
+												<p class="member-havy" >Research interests</p>
+												<p>{{ member.interests | safe }}</p>
+											</div>
+											
+										</div>
+										
+									{% endif %}
+								{% endif %}
+							  {% endfor %}
+							</div>
+
+
+
+				<div class="row">
+					<h3>Alumni</h3>
+			
+							<div class="alumni container" style="padding-left:10px;">
+
+						<!-- no postdoc			 -->
+								<p class="member-havy" ></p>
+								{% for member in members %}
+								   {% if member.state == 'no' %}
+											<p>
+												<span>{{member.name}},</span>
+												{% if member.title == 'professor' %}<span><i>Professor</i></span>{% endif %}
+												{% if member.title == 'postdoc' %}<span><i>Postdoc student</i></span>{% endif %}
+												{% if member.title == 'phd' %}<span><i>Ph.D. student</i></span>{% endif %}
+												{% if member.title == 'graduate' %}<span><i>Graduate student</i></span>{% endif %}
+												{% if member.title == 'under' %}<span><i>Undergraduate student</i></span>{% endif %}
+												{% if member.title == 'visit' %}<span><i>Visiting student</i></span>{% endif %}
+												<span>Till:{{member.end | date:"m-20y"}},</span>
+												<span>Now:&nbsp;{{member.nowwhere}}</span>
+											</p>
+										{% endif %}
+								{% endfor %}
+								
+								
+								</div>					 
+					</div>
+			
+					
+			
+	</div>
+
+
+	
+	<div id="opportunity" class="opportunity container" style="margin-bottom:20px;margin-top:30px;">
+		<div class="opportunity-legend" >
+			<h2>Opportunities</h2>
+		</div>
+		<hr/>
+	
+		{% for opport in opportunities %}
+		<div class="opport-box col-md-4">
+			<h3>{{ opport.position }}</h3>
+			<p>{{ opport.desc }}</p>
+			<P><a href="/contactus">>> Contact Us <<</a></P>
+		</div>	
+		{% empty %}
+		<div class="opport-box col-md-4">
+			<p>No Vancancy Now</p>
+		</div>	
+		{% endfor %}
+	</div>
+</div>
+		
+{% endblock content %}

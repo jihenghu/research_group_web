@@ -1,0 +1,117 @@
+<!-- extends表明此页面继承自 base.html 文件 -->
+{% extends "base.html" %}
+{% load staticfiles %}
+
+<!-- 写入 base.html 中定义的 title -->
+{% block title %}
+    Products | RSEW
+{% endblock title %}
+
+<!-- 写入 base.html 中定义的 content -->
+{% block content %}
+
+
+<div class="container">
+	<ol class="breadcrumb">
+	  <li><a href="/index">Home</a></li>
+	  <li class="active">Products</li>
+	</ol>
+
+	<div id="group" class="container">		
+		<div class="group-legend">
+				<h2>Data Products</h2>
+		</div>
+		<hr/>
+			
+		{% for product in products %}
+		<div class="paper-wraper container">
+			{% if product.avatar %}
+			<div class="col-md-4">
+				<img style="height:270px;width:360px;"  src="{{ product.avatar.url }}">
+			</div>
+			<div class="col-md-8 body-wraper">
+			{% else %}
+			<div class="col-md-12 body-wraper">
+			{% endif %}
+				<h3>
+					<b>				
+						<a href="{% url 'products:detail' product.slug %}"
+						   style="color: black;" 
+						>
+							{{ product.longname }}
+						</a>
+					</b>
+				</h3>
+				<!-- 时间/期刊 -->
+				<div class="col-md-12">	
+					<p class="col-md-3"> <i title="slug" class="fas fa-tags" style="color: Navy;">&nbsp;</i>
+						<strong>{{ product.slug | upper }}</strong>
+					</p>
+					<p class="col-md-4"> <i title="spatial coverage" class="fas fa-globe" style="color: Navy;">&nbsp;</i>
+						<strong>{{ product.spatial_coverage | capfirst }} | {{ product.spatial_resolution }}</strong>
+					</p>					
+					<p class="col-md-5"> <i  title="temporal coverage" class="fas fa-clock" style="color: Navy;">&nbsp;</i>
+						<strong>{{ product.date_start | date:"Y-m-d" }} ~ {{ product.date_end | date:"Y-m-d" }} | {{ product.temporal_resolution }}</strong>
+					</p>
+
+
+				</div>
+				<!-- 摘要 -->
+				<div>
+					<p style="color: gray;">
+						{{ product.desc|slice:'1000' }}...
+					</p>
+				</div>
+
+			</div>
+			
+		</div>			
+		{% endfor %}				
+	</div>
+		    <!-- 页码导航 -->
+		<nav aria-label="pagination container" style="text-align:center;">
+		  <ul class="pagination ">	
+					<!-- 如果不是第一页，则显示上翻按钮 -->
+				{% if products.has_previous %}
+				<li>
+					
+						<a href="?page=1">&laquo; 1</a>
+					
+				</li>
+				<li><span>...</span></li>
+				<li>
+					
+						<a href="?page={{ products.previous_page_number }}" >
+							{{ products.previous_page_number }}
+						</a>
+					
+				</li>
+				{% endif %}
+
+				<!-- 当前页面 -->
+				<li class="active">			
+					<span>{{ products.number }}<span class="sr-only">(current)</span></span>
+				</li>
+		  
+				<!-- 如果不是最末页，则显示下翻按钮 -->
+				{% if products.has_next %}
+				<li>
+					
+					<a href="?page={{ products.next_page_number }}"> {{ products.next_page_number }} </a>
+				
+				</li>						
+				<li><span>...</span></li>
+				<li>
+								
+						<a href="?page={{ products.paginator.num_pages }}">{{ products.paginator.num_pages }} &raquo; </a>
+					
+				</li>
+				{% endif %}  
+			 </ul>
+		</nav>
+	
+
+</div>
+
+
+{% endblock content %}

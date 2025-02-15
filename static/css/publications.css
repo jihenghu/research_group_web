@@ -1,0 +1,17 @@
+
+.publication-avator{
+	height:180px;
+	width:150px;
+}
+
+div.paper-wraper{
+	margin-bottom:20px;
+	padding-bottom:20px;
+	border-bottom:1px solid #ddd;
+}
+
+div.image-wraper,
+div.body-wraper
+{
+	padding:0px;
+}

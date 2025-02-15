@@ -1,0 +1,8 @@
+Django==2.1
+gunicorn==20.0.4
+Markdown==3.1.1
+Pillow==6.2.1
+Pygments==2.5.2
+pytz==2019.3
+python 3.6
+pip 9.0.1

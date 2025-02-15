@@ -1,0 +1,126 @@
+<!-- extends表明此页面继承自 base.html 文件 -->
+{% extends "base.html" %}
+{% load staticfiles %}
+
+<!-- 写入 base.html 中定义的 title -->
+{% block title %}
+    Resource | RSEW
+{% endblock title %}
+
+<!-- 写入 base.html 中定义的 content -->
+{% block content %}
+
+
+<div class="container">
+	<ol class="breadcrumb">
+	  <li><a href="/index">Home</a></li>
+	  <li><a href="/research">Research</a></li>
+	  <li class="active">Resource</li>
+	</ol>
+
+
+<!-- popular-links -->
+	<div id="popular-links" class="container">		
+		<div class="lab-legend">
+			<h2>Popular Links</h2>
+		</div>
+		<hr/>	
+		
+		<div class="container" style="padding:10px;">
+			{% for link in links %}
+			<div class="col-md-2">		
+				<a href="{{ link.url }}" target="blank" style="color:#000;" title="{{ link.desc }}">
+					<div style="text-align:center;border:1px solid #7B4D12;border-radius:5px;padding-top:5px;padding-bottom:5px;margin-bottom:20px;">
+					<b>{{ link.title }}</b>
+				</div></a>
+			</div>							
+			{% endfor %}			
+		</div>		
+	</div>
+
+<!-- image-gallery	 -->
+	<div id="image-gallery" class="container">		
+		<div class="group-legend">
+				<h2>Image Gallery</h2>
+		</div>
+		<hr/>
+			
+		<div class="container">
+			{% for image in galleryimages %}
+			<div class="col-md-3" style="margin-top:20px;height:360px;">
+				<div class="col-md-12">
+					<img data-toggle="modal" data-target="#gallery-modal-lg-{{ forloop.counter0 }}" title="{{ image.title }}" alt="{{ image.title }}" src="{{ image.image.url }}" style="width:232px; height:232px;">
+				</div>			
+				<div class="col-md-12" style="margin-top:10px;">
+					<p><small>{{ image.desc | slice:'200' }}...</small></p>
+				</div>
+				
+				<!-- Modal -->										
+				<div class="modal fade bs-example-modal-lg text-center" id="gallery-modal-lg-{{ forloop.counter0 }}"  tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" >
+				  <div class="modal-dialog modal-lg" style="display: inline-block; width: auto;">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title" id="myModalLabel">{{ image.title }}</h4>
+						</div>
+						<img  src="{{ image.image.url }}" style="margin-top:20px;max-width:1600px;">
+						<hr/>
+						<div style="padding-left:250px;padding-right:250px;">
+							<p>{{ image.desc }}</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				  </div>
+				</div>
+			</div>							
+			{% endfor %}			
+		</div>		
+	
+		    <!-- 页码导航 -->
+		<nav aria-label="pagination container" style="text-align:center;">
+		  <ul class="pagination ">	
+					<!-- 如果不是第一页，则显示上翻按钮 -->
+				{% if galleryimages.has_previous %}
+				<li>
+					
+						<a href="?page=1">&laquo; 1</a>
+					
+				</li>
+				<li><span>...</span></li>
+				<li>
+					
+						<a href="?page={{ galleryimages.previous_page_number }}" >
+							{{ galleryimages.previous_page_number }}
+						</a>
+					
+				</li>
+				{% endif %}
+
+				<!-- 当前页面 -->
+				<li class="active">			
+					<span>{{ galleryimages.number }}<span class="sr-only">(current)</span></span>
+				</li>
+		  
+				<!-- 如果不是最末页，则显示下翻按钮 -->
+				{% if galleryimages.has_next %}
+				<li>
+					
+					<a href="?page={{ galleryimages.next_page_number }}"> {{ galleryimages.next_page_number }} </a>
+					
+				</li>						
+				<li><span>...</span></li>
+				<li>
+									
+						<a href="?page={{ galleryimages.paginator.num_pages }}">{{ galleryimages.paginator.num_pages }} &raquo; </a>
+					
+				</li>
+				{% endif %}  
+			 </ul>
+		</nav>
+	</div>
+
+</div>
+
+{% endblock content %}

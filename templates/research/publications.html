@@ -1,0 +1,144 @@
+<!-- extends表明此页面继承自 base.html 文件 -->
+{% extends "base.html" %}
+{% load staticfiles %}
+
+<!-- 写入 base.html 中定义的 title -->
+{% block title %}
+    Publications | RSEW
+{% endblock title %}
+
+<!-- 写入 base.html 中定义的 content -->
+{% block content %}
+
+
+<div class="container">
+	<ol class="breadcrumb">
+	  <li><a href="/index">Home</a></li>
+	  <li><a href="/research">Research</a></li>
+	  <li class="active">Publications</li>
+	</ol>
+
+	<div id="group" class="container">		
+		<div class="group-legend">
+				<h2>Highlights</h2>
+		</div>
+		<hr/>
+			
+		{% for publication in publications %}
+		<div class="paper-wraper container">
+			{% if publication.avatar %}
+			<div class="col-md-2 image-wraper">
+				<img class="publication-avator" src="{{ publication.avatar.url }}">
+			</div>		
+			<div class="col-md-10 body-wraper">
+			{% else %}
+			<div class="col-md-12 body-wraper">
+			{% endif %}			
+			
+				<h4>
+					<b>				
+						<a href="{% url 'research:publication_detail' publication.id %}"
+						   style="color: black;" 
+						>
+							{{ publication.title }}
+						</a>
+					</b>
+				</h4>
+				<!-- 时间/期刊 -->
+				<div class="col-md-12">	
+					<p class="col-md-4"> <i title="Journal" class="fas fa-book" style="color: gray;">&nbsp;</i>
+						<strong>{{ publication.journal }}</strong>
+					</p>					
+					<p class="col-md-3"> <i  title="Accepted" class="fas fa-calendar" style="color: gray;">&nbsp;</i>
+						<strong>Accepted: {{ publication.accept | date:"Y-m-d"  }}</strong>
+					</p>
+
+					<p class="col-md-5"> <i title="Major authors" class="fas fa-user" style="color: gray;">&nbsp;</i>
+						<strong>{{ publication.authors  }}</strong>
+					</p>
+				</div>
+				<!-- 摘要 -->
+				<div>
+					<p style="color: gray;">
+						{{ publication.abstract|slice:'600' }}...
+					</p>
+				</div>
+
+			</div>
+			
+		</div>			
+		{% endfor %}				
+	
+		    <!-- 页码导航 -->
+		<nav aria-label="pagination container" style="text-align:center;">
+		  <ul class="pagination ">	
+					<!-- 如果不是第一页，则显示上翻按钮 -->
+				{% if publications.has_previous %}
+				<li>
+					
+						<a href="?page=1">&laquo; 1</a>
+					
+				</li>
+				<li><span>...</span></li>
+				<li>
+					
+						<a href="?page={{ publications.previous_page_number }}" >
+							{{ publications.previous_page_number }}
+						</a>
+					
+				</li>
+				{% endif %}
+
+				<!-- 当前页面 -->
+				<li class="active">			
+					<span>{{ publications.number }}<span class="sr-only">(current)</span></span>
+				</li>
+		  
+				<!-- 如果不是最末页，则显示下翻按钮 -->
+				{% if publications.has_next %}
+				<li>
+					
+					<a href="?page={{ publications.next_page_number }}"> {{ publications.next_page_number }} </a>
+					
+				</li>						
+				<li><span>...</span></li>
+				<li>
+									
+						<a href="?page={{ publications.paginator.num_pages }}">{{ publications.paginator.num_pages }} &raquo; </a>
+					
+				</li>
+				{% endif %}  
+			 </ul>
+		</nav>
+	</div>
+<!-- Full List -->
+	<div class="container">		
+		<div class="lab-legend">
+			<h2>Full List</h2>
+		</div>
+		<hr/>	
+		
+		<div class="container pub-list">
+			{% for publist in publists %}
+			<!-- <div class="col-md-12" style="border-bottom:1px solid #ddd; padding-bottom:5px;padding-top:10px;padding-left:0px;"> -->
+			<div class="col-md-12" style="border-bottom:1px solid #ddd;padding-top:10px; padding-left:0px;padding-right:0px;">
+			
+				
+				<!-- {% if publist.type == 'journal' %} <i title="Journal Article" class="fas fa-book" style="color: green;">&nbsp;</i>{% endif %} -->
+				<!-- {% if publist.type == 'patent' %} <i title="Patent/Monograph" class="fas fa-tools" style="color: red;">&nbsp;</i>{% endif %} -->
+				<!-- {% if publist.type == 'conference' %} <i title="Conference Articles/Abstracts" class="fas fa-microphone" style="color: blue;">&nbsp;</i>{% endif %} -->
+			
+				{{ publist.reference | safe }}
+			    <!-- <i title="Accepted" class="fas fa-calendar" style="color: grey;">&nbsp;</i><strong>{{ publist.accept | date:"m-20y" }}</strong></span> -->
+			</div>
+			{% endfor %}
+		</div>
+	
+	
+	</div>
+	
+
+
+</div>
+
+{% endblock content %}

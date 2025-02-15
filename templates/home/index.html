@@ -1,0 +1,135 @@
+
+{% extends "base.html" %}
+{% load staticfiles %}
+
+
+{% block title %}
+    Home | RSEW
+{% endblock title %}
+
+
+{% block content %}
+
+<div class="container-fliud">
+
+<div class="container"  >
+	<div class="row" style="margin-top:10px;"  >
+		<div class="col-md-7" style="margin-bottom:10px;"  >
+			<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+			  <!-- Indicators -->
+			  <ol class="carousel-indicators">
+			   {% for news in news_list %}
+				<li data-target="#carousel-example-generic" data-slide-to="{{ forloop.counter0 }}" class=" {% if forloop.counter0 == 0 %}active {% endif %}"></li>
+			   {% endfor %}
+			  </ol>
+
+			  <!-- Wrapper for slides -->
+			  <div class="carousel-inner" role="listbox">
+			  {% for news in news_list %}
+				<div class="item {% if forloop.counter0 == 0 %}active {% endif %}">
+				  {% if news.avatar %}
+				  <a href="{% url 'news:detail' news.id %}"><img src="{{ news.avatar.url }}" alt="{{ news.title }}" style="height:320px;width:1170px;"></a>
+				  {% else %}
+				  <a href="{% url 'news:detail' news.id %}"><img src="/media/utils/no-object-found.gif" alt="{{ news.title }}" style="height:320px;width:1170px;"></a>
+				  {% endif %}
+				  <div class="carousel-caption" style="right:15%;left:15%;background-color:rgba(0,0,0,0.4);padding-left:20px;padding-right:20px;">
+					<a href="{% url 'news:detail' news.id %}" style="color:#FFF;"><h4>{{ news.title }}</h4></a>
+					<p style="font-size:14px;">{{ news.summary | slice:"200" }}</p>
+				  </div>
+				</div>
+			  {% endfor %}
+			  </div>
+
+			  <!-- Controls -->
+			  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+				<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+				<span class="sr-only">Previous</span>
+			  </a>
+			  <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+				<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+				<span class="sr-only">Next</span>
+			  </a>
+			</div>
+		</div>
+		
+		
+			
+			<div id="side-column"  class="col-md-5" style="margin-bottom:10px;">
+			{% for publication in publications %}
+			<div  id="column-item-{{  forloop.counter0  }}"				
+			style="padding:10px 15px 10px 15px;border-top:0.01em solid #ddd;
+			{% if forloop.counter0 == 3 %} border-bottom:0.01em solid #ddd;{% endif %}">
+			
+			<li style="display:inline-block;">
+			<a href="{% url 'research:publication_detail' publication.id  %}"  title="{{ publication.title }}">
+			{{ publication.title | slice:"120" }}...</a>	</li>
+			<div><span>{{ publication.accept | date:"Y-m-d" }}</span>{% if publication.journal %}&nbsp;&nbsp;&nbsp;<span>{{ publication.journal }}</span>{% endif %}</div>
+			</div>	
+			{% endfor %}
+			</div>
+	</div>
+
+
+
+		<div class="row" style="margin-top:15px;" >
+
+				<div class="col-md-12" style="font-size: 16px;  line-height: 1.428;  color: #555;">					
+							{{ lab.desc | safe }}					
+				</div>
+						
+				
+				<div class="col-md-7">
+				<h4><b>We are dedicated in the following research fields</b></h4>
+				{% for focus in focus_list %}
+					<p class="research-statement">														
+						<a href="/research/focus#{{ focus.title }}"><b>{{ focus.title }}</a></b>&nbsp;&nbsp;&nbsp;{{ focus.body | slice:"290" }}...															
+					</p>
+					{% endfor %}
+				</div>
+
+			
+				<div class="col-md-5" style="padding-top:20px;">					  
+						<img style="float:right;width:100%;"  src="{{ lab.image.url }}" alt="Our Team" title="Our Team">
+							<!-- <p style="text-align:center;">Our group members</p> -->
+				</div>
+			
+		</div>									
+
+
+
+
+
+	<div class="row" >
+	<h1 style="color:#333;">
+	</h1>
+	
+	<div class="col-md-12">
+		<p class="research-statement" >
+			As an essential part of our work, several scientific products are developed/improved to provide alterative way to describe mechanisms, 
+			monitor changes, reveal interactions in atmosphere, ecosystem, hydrosphere and climatology based on satellite remote sensing. 
+			These products have remarkable values in data assimilations and used as modelling inputs,
+			also most of them are independent data products providing lots of scientific information and can be important supplements to similar widely accepted products.
+		</p>
+	</div>
+	
+	 {% for product in products %}
+	  <div class="col-sm-6 col-md-3" style="text-align:left;padding-top:20px;height:480px;margin-bottom:40px;">
+		<div class="thumbnail" style="padding-top:10px;box-shadow:2px 2px 5px #888888;">
+		  <img src="{{ product.avatar.url }}" style="width:280px;height:210px;" alt="{{ product.longname }}">
+		  <div class="caption">
+			<div style="height:220px;overflow:hidden;">
+				<a href="/products/{{ product.slug }}"><h3>{{ product.longname }}</h3></a>
+				<p  style="height:140px;">{{ product.desc | slice:"300" }}...</p>
+			</div>
+		  </div>
+		</div>
+	  </div>
+	  {% endfor %}
+	</div>
+
+</div>
+
+
+
+</div>
+{% endblock content %}

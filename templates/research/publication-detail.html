@@ -1,0 +1,154 @@
+<!-- extends表明此页面继承自 base.html 文件 -->
+{% extends "base.html" %}
+{% load staticfiles %}
+
+<!-- 写入 base.html 中定义的 title -->
+{% block title %}
+Detail | Publications
+{% endblock title %}
+
+<!-- 写入 base.html 中定义的 content -->
+{% block content %}
+
+<div class="container">
+	<ol class="breadcrumb">
+	  <li><a href="/index">Home</a></li>
+	  <li><a href="/research">Research</a></li>
+	  <li><a href="/research/publications">Publications</a></li>
+	  <li class="active">Detail</li>
+	</ol>
+
+	<div class="container">		
+		<div class="lab-legend">
+				<h2>Publication Detail</h2>
+			</div>
+			<hr/>
+			
+
+			<div class="container">				
+					<h2 style="text-align:center;margin-bottom:20px;">
+						<b>				
+
+								{{ publication.title }}
+
+						</b>
+					</h2>
+					<!-- 时间/期刊 -->
+					<div class="col-md-12" style="margin-bottom:20px;">
+					    {% if publication.authors %}
+						<p class="container" style="text-align:center;"> 
+						<i class="fas fa-user" style="color: grey;">&nbsp;</i>
+							<strong>{{ publication.authors  }}</strong>
+						</p>
+						{% endif %}	
+						{% if publication.journal %}
+						<p class="col-md-8">
+							<i class="fas fa-book" style="color: gray;">&nbsp;</i>
+							<strong>Journal: {{ publication.journal }}</strong>
+						</p>
+						{% endif %}
+						{% if publication.accept %}
+						<p class="col-md-4" style="text-align:right;" > 
+							<i class="fas fa-clock" style="color: gray;">&nbsp;</i>
+							<strong>Accepted: {{ publication.accept | date:"Y-m-d"  }}</strong>
+						</p>
+						{% endif %}
+					</div>
+					
+					<!-- 摘要 -->
+					{% if publication.abstract %}
+					<h4><b>Abstract</b></h4>
+					<div class="container col-md-12" style="margin-bottom:20px;padding-left:20px;padding-right:20px;">						
+						<p style="color: gray;">
+							{{ publication.abstract| safe }}
+						</p>
+					</div>
+					{% endif %}
+
+                    {% if publication.graph %}
+					<div class="container col-md-12">
+						<h4><b>Graphics</b></h4>
+						<div  style="text-align:center;">
+							<!-- trigger modal -->
+							<img data-toggle="modal" data-target="#bs-modal-lg-{{ forloop.counter0 }}" style="width: auto;height: auto; max-width: 100%; " src="{{ publication.graph.url }}" >
+
+							<!-- Modal -->										
+							<div class="modal fade bs-example-modal-lg text-center" id="bs-modal-lg-{{ forloop.counter0 }}"  tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" >
+							  <div class="modal-dialog modal-lg" style="display: inline-block; width: auto;">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+										<h4 class="modal-title" id="myModalLabel">Graphics</h4>
+									</div>
+									<img  src="{{ publication.graph.url }}" >
+									<div class="modal-footer">
+										<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+									</div>
+								</div>
+							  </div>
+							</div>
+
+						</div>
+					</div>
+					
+
+					
+					
+					
+					{% endif %}
+					
+					{% if publication.url %}
+					<div class="container col-md-12" >
+						<h4><b>URL</b></h4>					
+						<p style="color: gray;">
+						     <i class="fas fa-link" style="color: grey;">&nbsp;</i>
+							 <a href="{{ publication.url }}" target="blank">{{ publication.url }}</a>
+						</p>				
+					</div>
+					{% endif %}
+					
+					{% if publication.doi %}
+					<div class="container col-md-12">
+						<h4><b>DOI</b></h4>
+						<p style="color: gray;">
+						     <i class="fas fa-link" style="color: grey;">&nbsp;</i>
+							 <a href="{{ publication.doi }}" target="blank">{{ publication.doi }}</a>
+						</p>
+					</div>
+					{% endif %}
+				</div>				
+			</div>
+
+			            <hr/>
+			<div class="row">
+				{% if next_article %}
+				<div  style="float:left;">
+				
+					<a href="{% url 'research:publication_detail' next_article.id %}" class="btn btn-default">
+					<< Next  |  {{ next_article.title | slice:'60' }}....
+					</a>
+				</div>
+				{% endif %}
+				
+			{% if pre_article %}
+				<div  style="float:right;">
+					<a  href="{% url 'research:publication_detail' pre_article.id %}" class="btn  btn-default" >
+					Previous |	{{ pre_article.title | slice:'60' }}.... >></a>
+					</a>
+				</div>
+			{% endif %}
+			</div>
+	</div>
+				
+
+
+
+
+
+
+
+
+
+{% endblock content %}
+
+
